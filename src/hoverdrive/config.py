@@ -22,9 +22,7 @@ class Config(BaseSettings):
 
     name: str = Field("hoverdrive", title="Name of application")
 
-    path_prefix: str = Field(
-        "/hoverdrive", title="URL prefix for application"
-    )
+    path_prefix: str = Field("/hoverdrive", title="URL prefix for application")
 
     profile: Profile = Field(
         Profile.development, title="Application logging profile"
