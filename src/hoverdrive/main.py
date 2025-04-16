@@ -13,12 +13,12 @@ from importlib.metadata import metadata, version
 
 import structlog
 from fastapi import FastAPI
-from safir.dependencies.http_client import http_client_dependency
 from safir.logging import configure_logging, configure_uvicorn_logging
 from safir.middleware.x_forwarded import XForwardedMiddleware
 from safir.slack.webhook import SlackRouteErrorHandler
 
 from .config import config
+from .dependencies.context import context_dependency
 from .handlers.external import external_router
 from .handlers.internal import internal_router
 
@@ -29,11 +29,12 @@ __all__ = ["app"]
 async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     """Set up and tear down the application."""
     # Any code here will be run when the application starts up.
+    await context_dependency.initialize()
 
     yield
 
     # Any code here will be run when the application shuts down.
-    await http_client_dependency.aclose()
+    await context_dependency.aclose()
 
 
 configure_logging(
