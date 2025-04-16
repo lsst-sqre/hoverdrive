@@ -56,7 +56,7 @@ app = FastAPI(
 """The main FastAPI application for hoverdrive."""
 
 # Attach the routers.
-app.include_router(internal_router)
+app.include_router(internal_router, include_in_schema=False)
 app.include_router(external_router, prefix=f"{config.path_prefix}")
 
 # Add middleware.

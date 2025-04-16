@@ -124,6 +124,11 @@ python_files = ["tests/*.py", "tests/*/*.py"]
 [tool.ruff]
 extend = "ruff-shared.toml"
 
+[tool.ruff.lint.extend-per-file-ignores]
+"src/hoverdrive/handlers/**/endpoints.py" = [
+    "D401" # Use docstrings for HTTP API descriptions.
+]
+
 [tool.ruff.lint.isort]
 known-first-party = ["hoverdrive", "tests"]
 split-on-trailing-comma = false
