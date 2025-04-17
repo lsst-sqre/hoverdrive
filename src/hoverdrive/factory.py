@@ -10,6 +10,13 @@ from typing import Self
 from httpx import AsyncClient
 from structlog.stdlib import BoundLogger
 
+from hoverdrive.services.links import LinksService
+
+from .config import config
+from .storage.ookapi import OokClient
+
+__all__ = ["Factory", "ProcessContext"]
+
 
 @dataclass(kw_only=True, frozen=True, slots=True)
 class ProcessContext:
@@ -94,3 +101,27 @@ class Factory:
     def http_client(self) -> AsyncClient:
         """The shared HTTP client."""
         return self._process_context.http_client
+
+    def get_links_service(self) -> LinksService:
+        """Get the links service.
+
+        Returns
+        -------
+        LinksService
+            The links service.
+        """
+        return LinksService(ook_client=self.get_ook_client())
+
+    def get_ook_client(self) -> OokClient:
+        """Get the Ook client.
+
+        Returns
+        -------
+        OokClient
+            The Ook client.
+        """
+        return OokClient(
+            base_url=config.ook_url,
+            http_client=self.http_client,
+            logger=self._logger,
+        )

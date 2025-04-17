@@ -25,7 +25,8 @@ dependencies = [
     "pydantic>2",
     "pydantic-settings",
     "safir>=5",
-    "uvicorn[standard]"
+    "uvicorn[standard]",
+    "uritemplate"
 ]
 
 [[project.authors]]
@@ -48,6 +49,7 @@ dev = [
     "pytest",
     "pytest-asyncio",
     "pytest-cov",
+    "respx",
 ]
 docs = [
     "scriv[toml]"

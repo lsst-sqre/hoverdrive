@@ -34,6 +34,11 @@ class Config(BaseSettings):
         description="If set, alerts will be posted to this Slack webhook",
     )
 
+    ook_url: str = Field(
+        "https://roundtable.lsst.cloud/ook",
+        description="Base URL for the Ook API",
+    )
+
 
 config = Config()
 """Configuration for hoverdrive."""
