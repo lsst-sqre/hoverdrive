@@ -44,7 +44,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 # Install the Hoverdrive Python application.
 ADD . /app
-RUN --mount=type=cache,target=/.root/.cache/uv \
+RUN --mount=type=cache,target=/root/.cache/uv \
     uv pip install --no-deps --compile-bytecode .
 
 FROM base-image AS runtime-image
