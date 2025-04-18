@@ -49,8 +49,8 @@ async def test_get_column_docs_link_redirect(
     response = await client.get(
         "/hoverdrive/column-docs-links",
         params={
-            "table_name": "dp02_dc2_catalogs.Object",
-            "column_name": "detect_isPrimary",
+            "table": "dp02_dc2_catalogs.Object",
+            "column": "detect_isPrimary",
             "redirect": True,
         },
     )
@@ -84,7 +84,7 @@ async def test_get_table_docs_link_redirect(
     response = await client.get(
         "/hoverdrive/table-docs-links",
         params={
-            "table_name": "dp02_dc2_catalogs.Object",
+            "table": "dp02_dc2_catalogs.Object",
             "redirect": True,
         },
     )
@@ -120,8 +120,8 @@ async def test_get_column_docs_links_redirect_required(
     response = await client.get(
         "/hoverdrive/column-docs-links",
         params={
-            "table_name": "dp02_dc2_catalogs.Object",
-            "column_name": "detect_isPrimary",
+            "table": "dp02_dc2_catalogs.Object",
+            "column": "detect_isPrimary",
         },
     )
     assert response.status_code == 501
@@ -151,7 +151,7 @@ async def test_get_table_docs_links_redirect_required(
     response = await client.get(
         "/hoverdrive/table-docs-links",
         params={
-            "table_name": "dp02_dc2_catalogs.Object",
+            "table": "dp02_dc2_catalogs.Object",
         },
     )
     assert response.status_code == 501

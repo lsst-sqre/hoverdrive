@@ -37,10 +37,21 @@ async def get_column_docs_links(
     *,
     table_name: Annotated[
         str,
-        Query(..., title="Table name", examples=["dp02_dc2_catalogs.Object"]),
+        Query(
+            ...,
+            alias="table",
+            title="Table name",
+            examples=["dp02_dc2_catalogs.Object"],
+        ),
     ],
     column_name: Annotated[
-        str, Query(..., title="Column name", examples=["detect_isPrimary"])
+        str,
+        Query(
+            ...,
+            alias="column",
+            title="Column name",
+            examples=["detect_isPrimary"],
+        ),
     ],
     redirect: Annotated[
         bool,
@@ -80,7 +91,12 @@ async def get_table_docs_links(
     *,
     table_name: Annotated[
         str,
-        Query(..., title="Table name", examples=["dp02_dc2_catalogs.Object"]),
+        Query(
+            ...,
+            alias="table",
+            title="Table name",
+            examples=["dp02_dc2_catalogs.Object"],
+        ),
     ],
     redirect: Annotated[
         bool,
