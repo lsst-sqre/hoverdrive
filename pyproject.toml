@@ -1,14 +1,14 @@
 [project]
 # https://packaging.python.org/en/latest/specifications/declaring-project-metadata/
 name = "hoverdrive"
-description = "VO service providing documentation links for hover tooltips in the Rubin Science Platform"
-license = "MIT"
-license-files = ["LICENSE"]
+description = "VO service providing documentation links for hover tooltips in the Rubin Science Platform."
+license = { file = "LICENSE" }
 readme = "README.md"
 keywords = ["rubin", "lsst"]
 # https://pypi.org/classifiers/
 classifiers = [
     "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.13",
@@ -19,16 +19,52 @@ classifiers = [
     "Typing :: Typed",
 ]
 requires-python = ">=3.13"
-dependencies = []
 dynamic = ["version"]
+dependencies = [
+    "fastapi>=0.100",
+    "pydantic>2",
+    "pydantic-settings",
+    "safir>=5",
+    "uvicorn[standard]",
+    "uritemplate"
+]
+
+[[project.authors]]
+name = "Association of Universities for Research in Astronomy, Inc. (AURA)"
+email = "sqre-admin@lists.lsst.org"
 
 [project.urls]
 Homepage = "https://hoverdrive.lsst.io"
 Source = "https://github.com/lsst-sqre/hoverdrive"
 
 [build-system]
-requires = ["setuptools>=61", "wheel", "setuptools_scm[toml]>=6.2"]
+requires = ["setuptools>=61", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
+
+[dependency-groups]
+dev = [
+    "asgi-lifespan",
+    "coverage[toml]",
+    "httpx",
+    "pytest",
+    "pytest-asyncio",
+    "pytest-cov",
+    "respx",
+]
+docs = [
+    "scriv[toml]"
+]
+lint = [
+    "pre-commit",
+    "pre-commit-uv",
+    "ruff>=0.9",
+]
+tox = [
+    "tox>=4.24",
+    "tox-docker>=5",
+    "tox-uv>=1.25",
+]
+typing = ["mypy"]
 
 [tool.coverage.run]
 parallel = true
@@ -89,6 +125,11 @@ python_files = ["tests/*.py", "tests/*/*.py"]
 # section for project-specific ignore rules.
 [tool.ruff]
 extend = "ruff-shared.toml"
+
+[tool.ruff.lint.extend-per-file-ignores]
+"src/hoverdrive/handlers/**/endpoints.py" = [
+    "D401" # Use docstrings for HTTP API descriptions.
+]
 
 [tool.ruff.lint.isort]
 known-first-party = ["hoverdrive", "tests"]

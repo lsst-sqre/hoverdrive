@@ -13,12 +13,13 @@ from importlib.metadata import metadata, version
 
 import structlog
 from fastapi import FastAPI
-from safir.dependencies.http_client import http_client_dependency
+from safir.fastapi import ClientRequestError, client_request_error_handler
 from safir.logging import configure_logging, configure_uvicorn_logging
 from safir.middleware.x_forwarded import XForwardedMiddleware
 from safir.slack.webhook import SlackRouteErrorHandler
 
 from .config import config
+from .dependencies.context import context_dependency
 from .handlers.external import external_router
 from .handlers.internal import internal_router
 
@@ -29,11 +30,12 @@ __all__ = ["app"]
 async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     """Set up and tear down the application."""
     # Any code here will be run when the application starts up.
+    await context_dependency.initialize()
 
     yield
 
     # Any code here will be run when the application shuts down.
-    await http_client_dependency.aclose()
+    await context_dependency.aclose()
 
 
 configure_logging(
@@ -55,11 +57,12 @@ app = FastAPI(
 """The main FastAPI application for hoverdrive."""
 
 # Attach the routers.
-app.include_router(internal_router)
+app.include_router(internal_router, include_in_schema=False)
 app.include_router(external_router, prefix=f"{config.path_prefix}")
 
 # Add middleware.
 app.add_middleware(XForwardedMiddleware)
+app.exception_handler(ClientRequestError)(client_request_error_handler)
 
 # Configure Slack alerts.
 if config.slack_webhook:
