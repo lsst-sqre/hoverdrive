@@ -3,7 +3,11 @@
 from fastapi import status
 from safir.fastapi import ClientRequestError
 
-__all__ = ["EndpointNotImplementedError", "NotFoundError"]
+__all__ = [
+    "EndpointNotImplementedError",
+    "LinkRedirectRequestError",
+    "NotFoundError",
+]
 
 
 class EndpointNotImplementedError(ClientRequestError):
@@ -18,3 +22,10 @@ class NotFoundError(ClientRequestError):
 
     error = "not_found"
     status_code = status.HTTP_404_NOT_FOUND
+
+
+class LinkRedirectRequestError(ClientRequestError):
+    """Link redirect request error."""
+
+    error = "bad_link_redirect_request"
+    status_code = status.HTTP_400_BAD_REQUEST

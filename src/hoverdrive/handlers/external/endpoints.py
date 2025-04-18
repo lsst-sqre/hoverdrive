@@ -4,10 +4,15 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, Query, Request
 from fastapi.responses import RedirectResponse
+from safir.models import ErrorLocation
 from safir.slack.webhook import SlackRouteErrorHandler
 
 from hoverdrive.dependencies.context import RequestContext, context_dependency
-from hoverdrive.exceptions import EndpointNotImplementedError, NotFoundError
+from hoverdrive.exceptions import (
+    EndpointNotImplementedError,
+    LinkRedirectRequestError,
+    NotFoundError,
+)
 
 from .models import Index
 
@@ -44,12 +49,16 @@ async def get_column_docs_links(
             examples=["dp02_dc2_catalogs.Object"],
         ),
     ],
-    column_name: Annotated[
-        str,
+    column_names: Annotated[
+        list[str],
         Query(
             ...,
             alias="column",
             title="Column name",
+            description=(
+                "The name of the column to get links for. Provide multiple "
+                "column parameters to get links for multiple columns."
+            ),
             examples=["detect_isPrimary"],
         ),
     ],
@@ -68,6 +77,13 @@ async def get_column_docs_links(
     factory = context.factory
     links_service = factory.get_links_service()
     if redirect:
+        if len(column_names) != 1:
+            raise LinkRedirectRequestError(
+                "Only one column name is supported for redirection.",
+                ErrorLocation.query,
+                ["column"],
+            )
+        column_name = column_names[0]
         link = await links_service.get_redirect_link_for_column(
             table_name, column_name
         )
@@ -89,12 +105,16 @@ async def get_column_docs_links(
 )
 async def get_table_docs_links(
     *,
-    table_name: Annotated[
-        str,
+    table_names: Annotated[
+        list[str],
         Query(
             ...,
             alias="table",
             title="Table name",
+            description=(
+                "The name of the table to get links for. Provide multiple "
+                "table parameters to get links for multiple tables."
+            ),
             examples=["dp02_dc2_catalogs.Object"],
         ),
     ],
@@ -113,6 +133,13 @@ async def get_table_docs_links(
     factory = context.factory
     links_service = factory.get_links_service()
     if redirect:
+        if len(table_names) != 1:
+            raise LinkRedirectRequestError(
+                "Only one table name is supported for redirection.",
+                ErrorLocation.query,
+                ["table"],
+            )
+        table_name = table_names[0]
         link = await links_service.get_redirect_link_for_table(table_name)
         if link is None:
             raise NotFoundError(

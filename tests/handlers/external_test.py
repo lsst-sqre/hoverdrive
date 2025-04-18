@@ -95,6 +95,62 @@ async def test_get_table_docs_link_redirect(
 
 
 @pytest.mark.asyncio
+async def test_get_column_docs_links_redirect_multiple_columns(
+    client: AsyncClient, respx_mock: respx.Router
+) -> None:
+    """Test ``GET /hoverdrive/column-docs-links`` with multiple columns for
+    redirection, which is not supported.
+    """
+    response = await client.get(
+        "/hoverdrive/column-docs-links",
+        params={
+            "table": "dp02_dc2_catalogs.Object",
+            "column": [
+                "detect_isPrimary",
+                "detect_isPrimary_2",
+            ],
+            "redirect": True,
+        },
+    )
+    assert response.status_code == 400
+    assert response.json() == {
+        "detail": [
+            {
+                "loc": ["query", "column"],
+                "msg": ("Only one column name is supported for redirection."),
+                "type": "bad_link_redirect_request",
+            }
+        ]
+    }
+
+
+@pytest.mark.asyncio
+async def test_get_table_docs_links_redirect_multiple_tables(
+    client: AsyncClient, respx_mock: respx.Router
+) -> None:
+    """Test ``GET /hoverdrive/table-docs-links`` with multiple tables for a
+    redirect, which is not supported.
+    """
+    response = await client.get(
+        "/hoverdrive/table-docs-links",
+        params={
+            "table": ["dp02_dc2_catalogs.Object", "dp02_dc2_catalogs.Visit"],
+            "redirect": True,
+        },
+    )
+    assert response.status_code == 400
+    assert response.json() == {
+        "detail": [
+            {
+                "loc": ["query", "table"],
+                "msg": ("Only one table name is supported for redirection."),
+                "type": "bad_link_redirect_request",
+            }
+        ]
+    }
+
+
+@pytest.mark.asyncio
 async def test_get_column_docs_links_redirect_required(
     client: AsyncClient, respx_mock: respx.Router
 ) -> None:
