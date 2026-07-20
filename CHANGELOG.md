@@ -7,6 +7,13 @@ Find changes for the upcoming release in the project's [changelog.d directory](h
 
 <!-- scriv-insert-here -->
 
+<a id='changelog-0.2.1'></a>
+## 0.2.1 (2026-07-20)
+
+### Other changes
+
+- Update pinned dependencies and pre-commit hooks.
+
 <a id='changelog-0.2.0'></a>
 
 ## 0.2.0 (2025-05-06)
