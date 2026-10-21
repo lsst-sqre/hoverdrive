@@ -7,6 +7,17 @@ Find changes for the upcoming release in the project's [changelog.d directory](h
 
 <!-- scriv-insert-here -->
 
+<a id='changelog-0.2.2'></a>
+## 0.2.2 (2026-10-21)
+
+### Other changes
+
+- Update the Python runtime to 3.14. The Docker base image is now `python:3.14.7-slim-trixie` (Debian 13), and `.python-version`, `requires-python`, and the PyPI classifier are all bumped to match so that CI and the container run the same interpreter.
+
+- Update dependencies. Safir 15.2.2 lifts the `cryptography<50` cap, which takes cryptography to 50.0.2 and PyJWT to 2.15.1 and closes the open Dependabot security alerts for both, along with urllib3 2.8.0 and virtualenv 21.14.7.
+
+- Update certifi to 2026.10.19 and uv to 0.13.4 ([GHSA-6q48-6c7w-9gw2](https://github.com/advisories/GHSA-6q48-6c7w-9gw2), [GHSA-hq85-5cpj-mr62](https://github.com/advisories/GHSA-hq85-5cpj-mr62)). Earlier versions of both trust the `emSign ECC Root CA - G3` root certificate, whose intermediate CAs have compromised private keys. uv is updated in the Dockerfile, CI, and pre-commit configuration as well as `uv.lock`. The rebuilt image also picks up Debian's `ca-certificates` security update ([DSA-6572-1](https://security-tracker.debian.org/tracker/DSA-6572-1)), which removes the same root from the system trust store.
+
 <a id='changelog-0.2.1'></a>
 ## 0.2.1 (2026-07-20)
 
