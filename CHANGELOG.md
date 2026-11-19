@@ -7,6 +7,13 @@ Find changes for the upcoming release in the project's [changelog.d directory](h
 
 <!-- scriv-insert-here -->
 
+<a id='changelog-0.2.3'></a>
+## 0.2.3 (2026-11-19)
+
+### Other changes
+
+- Update pinned dependencies, including opentelemetry-api 1.45.2, which picks up the fix for [GHSA-mf5v-w3w3-f6cg](https://github.com/advisories/GHSA-mf5v-w3w3-f6cg) proposed by Dependabot. Also update uv to 0.13.9 in the Dockerfile, CI, and pre-commit configuration.
+
 <a id='changelog-0.2.2'></a>
 ## 0.2.2 (2026-10-21)
 
